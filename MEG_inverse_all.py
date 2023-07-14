@@ -190,3 +190,6 @@ for data_file in data_files:
     residual_filename = os.path.join(stc_directory , data_file.replace('.fif', '_residual.stc'))
     stc.save(stc_filename, overwrite=True)
     residual.save(residual_filename, overwrite=True)
+#this script should work on the command line
+#work like "python script.py /path/fiffile.fif fs/direcory /output/direcory" 
+# monday 17 July
