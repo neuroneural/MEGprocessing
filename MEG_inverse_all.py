@@ -14,9 +14,13 @@ coreg_dir = "/data/users2/mjafarlou1/freesurfer/subjects/sub-01/coreg/"
 fwd_directory = "/data/users2/mjafarlou1/results/forwardsolution/sub-01"
 stc_directory = "/data/users2/mjafarlou1/results/stc/sub-01/"
 
-sub01_fid = np.array([[-72.90, -2.57, -63.73],[-0.49, 87.38, -53.45],[75.54, -3.75, -63.74]]) #LPA, Nasion, RPA
+# Figure out what is this below and how to find it for new unknown data
+# Can this be comouted?
+# TODO: figure out how to compute or read fiducial points!
+# sub01_fid = np.array([[-72.90, -2.57, -63.73],[-0.49, 87.38, -53.45],[75.54, -3.75, -63.74]]) #LPA, Nasion, RPA
 subject = "sub-01"
 
+# get rid of all the bloe starting here
 if not os.path.exists(fwd_directory):
     os.makedirs(fwd_directory)
 
@@ -25,6 +29,7 @@ if not os.path.exists(stc_directory):
 
 if not os.path.exists(coreg_dir):
     os.makedirs(coreg_dir)
+# ending here    
 
 # set the SUBJECTS_DIR environment variable
 os.environ['SUBJECTS_DIR'] = subjects_dir
@@ -41,13 +46,17 @@ plot_bem_kwargs = dict(
     show=True  # Display the plot
 )
 
-mne.viz.plot_bem(subject=subject, **plot_bem_kwargs)'''
+
+# script will not have a display
+# remove all display and replace with logging in text
+# mne.viz.plot_bem(subject=subject, **plot_bem_kwargs)'''
 
 # Compute BEM model and solution
 conductivity = (0.3,)  # for single layer
 model = mne.make_bem_model(subject="sub-01", ico=None, conductivity=conductivity, subjects_dir=subjects_dir)
 bem = mne.make_bem_solution(model)
 
+# !!!! DO NOT LOOP THROUGH THE FILES
 # Loop through raw files in the directory
 for filename in os.listdir(source_dir):
     if filename.endswith(".fif"):
@@ -192,4 +201,15 @@ for data_file in data_files:
     residual.save(residual_filename, overwrite=True)
 #this script should work on the command line
 #work like "python script.py /path/fiffile.fif fs/direcory /output/direcory" 
-# monday 17 July
+# this will be done by the end of Monday 17 July /Minoo undersigned ;)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        print("Usage: python MEG_inverse_all.py input_fif_file.fif /FreeSurfer/directory/ForThisSubjec/ /output/direcory")
+        sys.exit(1)
+
+    subject_data = sys.argv[1]
+    freesurfer_output_location = sys.argv[2]
+    output_directory = sys.argv[3]
+
+    # call your function defined above that does the work
